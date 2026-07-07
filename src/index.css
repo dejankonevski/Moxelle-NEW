@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-brand-cream: #FCFBF9;
+  --color-brand-teal: #00A19A;
+  --color-brand-teal-dark: #00847E;
+  --color-brand-navy: #26344E;
+  --color-brand-midnight: #0E0D1E;
+  --color-brand-neutralgray: #5A5A5A;
+  --color-brand-warmgray: #F5F4F0;
+}
+
+@layer utilities {
+  /* Custom smooth slide-in for shuttle laser particle */
+  @keyframes shuttle {
+    0% {
+      left: 0%;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
+  }
+
+  .animate-shuttle {
+    animation: shuttle 3s infinite linear;
+  }
+}
