@@ -33,8 +33,17 @@ export interface TalentProfile {
   title: string;
   avatar: string;
   skills: string[];
-  impact: string;
+  ipGuarantee: string;
   time: string;
   experience: string;
   roleCategory: 'backend' | 'frontend' | 'fullstack' | 'ai-data';
+  status: 'allocated' | 'available' | 'reserved';
+  nextAvailableDate?: string;
+  backupColleague?: {
+    name: string;
+    title: string;
+    avatar: string;
+    skills: string[];
+    experience: string;
+  };
 }

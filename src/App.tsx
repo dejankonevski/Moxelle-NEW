@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowRight, 
   Check, 
@@ -28,6 +28,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import TalentDirectory from './components/TalentDirectory';
 import BookingModal from './components/BookingModal';
+import BlogPage from './components/BlogPage';
 
 import { 
   METRIC_POINTS, 
@@ -38,6 +39,7 @@ import {
 } from './data';
 
 export default function App() {
+  const [currentView, setCurrentView] = useState<'home' | 'blog'>('home');
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [prefilledBooking, setPrefilledBooking] = useState<{ teamSize: string; techStack: string } | null>(null);
   
@@ -50,6 +52,39 @@ export default function App() {
   // Hero Talent Spotlight state
   const [heroTalentIndex, setHeroTalentIndex] = useState<number>(0);
   const [isChatOpen, setIsChatOpen] = useState(true);
+  const [chatProfile, setChatProfile] = useState<any>(null);
+  const chatTimerRef = useRef<any>(null);
+
+  useEffect(() => {
+    // Pick a random talent profile
+    const randomIndex = Math.floor(Math.random() * TALENT_PROFILES.length);
+    setChatProfile(TALENT_PROFILES[randomIndex]);
+
+    // Auto disappear if not clicked in 5 seconds
+    chatTimerRef.current = setTimeout(() => {
+      setIsChatOpen(false);
+    }, 5000);
+
+    return () => {
+      if (chatTimerRef.current) clearTimeout(chatTimerRef.current);
+    };
+  }, []);
+
+  const toggleChat = () => {
+    if (chatTimerRef.current) {
+      clearTimeout(chatTimerRef.current);
+    }
+    if (!isChatOpen) {
+      const randomIndex = Math.floor(Math.random() * TALENT_PROFILES.length);
+      setChatProfile(TALENT_PROFILES[randomIndex]);
+      setIsChatOpen(true);
+      chatTimerRef.current = setTimeout(() => {
+        setIsChatOpen(false);
+      }, 5000);
+    } else {
+      setIsChatOpen(false);
+    }
+  };
 
   const heroTalentList = TALENT_PROFILES;
 
@@ -69,9 +104,21 @@ export default function App() {
     <div className="min-h-screen bg-brand-cream text-brand-navy selection:bg-brand-teal selection:text-white antialiased font-sans flex flex-col">
       
       {/* Navigation Header */}
-      <Header onOpenBooking={() => openBooking()} />
+      <Header 
+        onOpenBooking={() => openBooking()} 
+        currentView={currentView}
+        onNavigateToHome={() => setCurrentView('home')}
+        onNavigateToBlog={() => setCurrentView('blog')}
+      />
 
       <main className="flex-grow pt-16">
+        {currentView === 'blog' ? (
+          <BlogPage 
+            onBackToHome={() => setCurrentView('home')} 
+            onOpenBooking={() => openBooking()} 
+          />
+        ) : (
+          <>
         
         {/* HERO SECTION WITH LIVE CANDIDATE SPOTLIGHTER */}
         <section id="hero" className="relative pt-12 pb-20 overflow-hidden border-b border-neutral-200">
@@ -84,15 +131,12 @@ export default function App() {
             {/* Left Column: Copy & Value Proposition */}
             <div className="lg:col-span-6 space-y-8 text-left">
               <div className="space-y-6">
-                <span className="font-mono text-xs uppercase tracking-widest text-brand-teal bg-brand-teal/5 border border-brand-teal/15 px-3.5 py-1.5 rounded-full font-bold inline-block">
-                  Your Dedicated Sprints Partner
-                </span>
-                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brand-navy leading-[1.05]">
-                  Deploy elite <span className="text-brand-teal block italic font-medium font-display">senior developers</span> on-demand.
+                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brand-navy leading-[1.1]">
+                  Deploy elite <span className="text-brand-teal block italic font-medium font-display">senior developers</span> on-demand—while protecting your intellectual property.
                 </h1>
 
                 <p className="text-sm md:text-base text-brand-neutralgray font-normal leading-relaxed max-w-xl">
-                  Moxelle builds dedicated engineering teams in Skopje, North Macedonia—fully integrated into your daily Slack, Jira, and GitHub repositories under your direct guidance, with zero entity overhead.
+                  Moxelle builds dedicated engineering teams globally—fully integrated into your daily Slack, Jira, and GitHub repositories under your direct guidance, with zero entity overhead.
                 </p>
               </div>
 
@@ -134,58 +178,63 @@ export default function App() {
                 </div>
 
                 {/* Standard Card 2 */}
-                <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-5 space-y-2 relative overflow-hidden transition-all hover:translate-y-[-2px] hover:border-emerald-500/30 flex flex-col justify-between">
+                <div className="bg-brand-pastelred/5 border border-brand-pastelred/20 rounded-2xl p-5 space-y-2 relative overflow-hidden transition-all hover:translate-y-[-2px] hover:border-brand-pastelred/30 flex flex-col justify-between">
                   <div className="flex justify-between items-center">
-                    <span className="font-mono text-2xl font-black text-emerald-600">
+                    <span className="font-mono text-2xl font-black text-brand-pastelred">
                       30%+
                     </span>
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-brand-pastelred shrink-0" />
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-sans font-bold text-xs text-brand-navy">
                       Capital Efficiency
                     </h4>
                     <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
-                      Secure dedicated, senior-grade engineers fully aligned on CET/EST timezones with substantial cost savings.
+                      Secure dedicated, senior-grade engineers fully integrated into your workflow with substantial cost savings.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Live Candidate Spotlighter */}
-            <div className="lg:col-span-6 flex flex-col justify-between bg-white border border-neutral-200 rounded-3xl p-6 md:p-8 shadow-sm relative">
-              <div className="space-y-6">
+            {/* Right Column: Dynamic Moxelle Team Spotlight */}
+            <div className="lg:col-span-6 flex flex-col justify-between bg-white border border-neutral-200 rounded-[2rem] p-6 md:p-8 shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-brand-teal/5 to-transparent rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="space-y-6 relative z-10">
                 
                 <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
                   <div className="text-left">
-                    <h4 className="font-display font-bold text-base text-brand-navy">
-                      Available Sprints Spotlight
+                    <h4 className="font-display font-bold text-base text-brand-navy flex items-center gap-2">
+                      <span>Moxelle Elite: Senior Spotlight</span>
                     </h4>
-                    <p className="text-xs text-brand-neutralgray">
-                      Vetted senior engineers ready for immediate timezone integration.
+                    <p className="text-xs text-brand-neutralgray mt-0.5">
+                      Select a featured engineer below to review their tech stack and immediately inquire to deploy them onto your core product.
                     </p>
                   </div>
                 </div>
 
                 {/* Candidate Selector Tabs */}
                 <div className="flex flex-wrap gap-1.5">
-                  {heroTalentList.map((talent, idx) => (
-                    <button
-                      key={talent.name}
-                      onClick={() => setHeroTalentIndex(idx)}
-                      className={`text-[10px] font-mono font-bold py-2 px-3 rounded-lg border transition-all cursor-pointer ${
-                        heroTalentIndex === idx
-                          ? 'bg-brand-navy border-brand-navy text-white shadow-xs'
-                          : 'border-neutral-200 text-brand-neutralgray hover:bg-neutral-50 hover:text-brand-navy'
-                      }`}
-                    >
-                      {talent.name}
-                    </button>
-                  ))}
+                  {heroTalentList.map((talent, idx) => {
+                    const isSelected = heroTalentIndex === idx;
+                    return (
+                      <button
+                        key={talent.name}
+                        onClick={() => setHeroTalentIndex(idx)}
+                        className={`text-[10px] font-mono font-bold py-2 px-4 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-brand-navy border-brand-navy text-white shadow-xs'
+                            : 'bg-brand-warmgray/30 border-neutral-200/80 text-brand-neutralgray hover:bg-neutral-50 hover:text-brand-navy'
+                        }`}
+                      >
+                        <span>{talent.name}</span>
+                      </button>
+                    );
+                  })}
                 </div>
 
-                {/* Selected Candidate Card */}
+                {/* Selected Lead Profile Display */}
                 <div className="bg-brand-warmgray border border-neutral-200/80 rounded-2xl p-5 space-y-4 relative overflow-hidden text-left">
                   <div className="flex gap-4 items-start">
                     <img
@@ -198,35 +247,42 @@ export default function App() {
                         <span className="font-display font-bold text-sm text-brand-navy">
                           {heroTalentList[heroTalentIndex].name}
                         </span>
-                        <span className="text-[9px] font-mono bg-brand-teal/10 text-brand-teal px-1.5 py-0.5 rounded-sm font-semibold">
-                          Active Lead
+                        <span className="text-[9px] font-mono bg-brand-teal/10 text-brand-teal border border-brand-teal/15 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wider">
+                          Verified Senior Elite
                         </span>
                       </div>
+                      
                       <p className="text-xs font-semibold text-brand-teal leading-tight">
                         {heroTalentList[heroTalentIndex].title}
                       </p>
-                      <p className="text-[10px] text-brand-neutralgray font-mono">
-                        {heroTalentList[heroTalentIndex].time}
-                      </p>
+                      
+                      <div className="flex items-center gap-1.5 text-[10px] text-brand-neutralgray font-mono">
+                        <span>{heroTalentList[heroTalentIndex].experience} Experience</span>
+                        <span>&bull;</span>
+                        <span>{heroTalentList[heroTalentIndex].time}</span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Impact Statement */}
+                  {/* Contractual IP Assignment */}
                   <div className="space-y-1 border-t border-neutral-200/60 pt-3">
-                    <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-wider font-bold">
-                      Proven SPRINT IMPACT
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-teal" />
+                      <span className="text-[9px] font-mono text-brand-teal uppercase tracking-wider font-bold">
+                        Airtight IP Protection &amp; Assignment
+                      </span>
+                    </div>
                     <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                      &ldquo;{heroTalentList[heroTalentIndex].impact}&rdquo;
+                      {heroTalentList[heroTalentIndex].ipGuarantee}
                     </p>
                   </div>
 
-                  {/* Skill Badges */}
-                  <div className="flex flex-wrap gap-1 pt-1">
+                  {/* Skills badges */}
+                  <div className="flex flex-wrap gap-1">
                     {heroTalentList[heroTalentIndex].skills.map((skill) => (
                       <span
                         key={skill}
-                        className="text-[10px] font-mono bg-white text-brand-darkgray border border-neutral-200 px-2 py-0.5 rounded-md"
+                        className="text-[10px] font-mono bg-white text-brand-neutralgray border border-neutral-200 px-2 py-0.5 rounded-md"
                       >
                         {skill}
                       </span>
@@ -234,28 +290,29 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="space-y-2 text-xs text-left">
-                  <div className="flex justify-between font-bold text-brand-navy">
-                    <span>Direct Timezone Onboarding</span>
-                    <span className="text-brand-teal font-mono text-[11px]">21 Days Kickoff</span>
+                {/* UNIFIED PREMIUM ENGAGEMENT ACTIONS */}
+                <div className="space-y-3.5">
+                  <div className="bg-emerald-500/[0.02] border border-emerald-500/10 rounded-xl p-3.5 text-left">
+                    <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
+                      <span className="font-semibold text-brand-navy">Onboarding Window: </span> 
+                      {heroTalentList[heroTalentIndex].name} is prepared to integrate into your daily Standups, Slack, and repositories within 14-21 days of strategy booking.
+                    </p>
                   </div>
-                  <p className="text-[11px] text-brand-neutralgray leading-relaxed">
-                    Selected developers are embedded directly into your tools (Slack, Jira, GitHub) under your internal engineering leadership. No intermediary project managers.
-                  </p>
+
+                  <button
+                    onClick={() => openBooking({ teamSize: '1 senior developer', techStack: `${heroTalentList[heroTalentIndex].name} (${heroTalentList[heroTalentIndex].title})` })}
+                    className="w-full bg-brand-navy hover:bg-brand-teal text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>Deploy {heroTalentList[heroTalentIndex].name} Onto Your Team</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
 
               </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between">
-                <button
-                  onClick={() => openBooking({ teamSize: '1 senior developer', techStack: `${heroTalentList[heroTalentIndex].name} (${heroTalentList[heroTalentIndex].title})` })}
-                  className="bg-brand-navy hover:bg-brand-navy/90 text-white font-bold text-xs py-2.5 px-4 rounded-xl transition-all cursor-pointer"
-                >
-                  Inquire about {heroTalentList[heroTalentIndex].name.split(' ')[0]}
-                </button>
-                <span className="text-[10px] font-mono text-neutral-400 font-semibold">
-                  Secure IP Assignment
-                </span>
+              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between relative z-10 text-[10px] font-mono text-neutral-400 font-semibold">
+                <span>Real-Time Direct Alignment</span>
+                <span>Secure IP Assignment</span>
               </div>
             </div>
 
@@ -305,7 +362,7 @@ export default function App() {
                     id: 'q1' as const,
                     tag: "Q1",
                     label: "What does Moxelle do?",
-                    summary: "Assembling, employing, and managing dedicated senior developer teams in Macedonia.",
+                    summary: "Assembling, employing, and managing dedicated senior developer teams globally.",
                   },
                   {
                     id: 'q2' as const,
@@ -367,49 +424,38 @@ export default function App() {
                       </p>
                     </div>
 
-                    {/* Simple Connected Node Diagram */}
-                    <div className="bg-white border border-neutral-200 rounded-2xl p-6">
-                      <div className="flex justify-between items-center text-center">
-                        <div className="flex flex-col items-center gap-1.5">
-                          <div className="w-10 h-10 rounded-xl bg-brand-navy text-white flex items-center justify-center border border-neutral-800 shadow-3xs">
-                            <Building className="w-5 h-5" />
-                          </div>
-                          <span className="font-mono text-[9px] font-bold text-brand-navy uppercase">YOUR HQ</span>
-                          <span className="font-mono text-[8px] text-brand-neutralgray">EST / GMT</span>
-                        </div>
-
-                        <div className="flex-grow mx-4 relative h-10 flex items-center justify-center">
-                          <div className="w-full h-[1px] bg-neutral-200" />
-                          <div className="absolute w-2 h-2 rounded-full bg-brand-teal shrink-0 animate-pulse" />
-                          <span className="absolute bg-white border border-neutral-200 px-2 py-0.5 rounded-full font-mono text-[8px] text-brand-neutralgray font-semibold">
-                            Direct Sprints
-                          </span>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-1.5">
-                          <div className="w-10 h-10 rounded-xl bg-brand-teal text-white flex items-center justify-center shadow-3xs">
-                            <Users className="w-5 h-5" />
-                          </div>
-                          <span className="font-mono text-[9px] font-bold text-brand-navy uppercase">MOXELLE POD</span>
-                          <span className="font-mono text-[8px] text-brand-neutralgray">100% Sync</span>
-                        </div>
-                      </div>
-                    </div>
-
+                    {/* Bolder, Clearer, 2x2 Clean Professional Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="bg-white p-4 rounded-xl border border-neutral-100 space-y-1">
-                        <span className="font-sans font-bold text-xs text-brand-navy block flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-brand-teal" />
-                          Employer of Record
-                        </span>
-                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">Moxelle absorbs 100% of regional tax, HR, and labor regulations with full compliance.</p>
+                      <div className="bg-white border border-neutral-200/80 rounded-2xl p-5 shadow-3xs space-y-2">
+                        <span className="font-mono text-[9px] text-brand-teal font-extrabold uppercase tracking-wider block">01 / REGIONAL COMPLIANCE</span>
+                        <h4 className="font-sans font-bold text-sm text-brand-navy">Employer of Record</h4>
+                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
+                          Moxelle handles 100% of regional tax, compliance, payroll, HR, and labor regulations with zero administrative client liability.
+                        </p>
                       </div>
-                      <div className="bg-white p-4 rounded-xl border border-neutral-100 space-y-1">
-                        <span className="font-sans font-bold text-xs text-brand-navy block flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          Premium Workspaces
-                        </span>
-                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">Fully equipped modern physical offices, high-spec notebooks, and deep engineering culture.</p>
+
+                      <div className="bg-white border border-neutral-200/80 rounded-2xl p-5 shadow-3xs space-y-2">
+                        <span className="font-mono text-[9px] text-brand-teal font-extrabold uppercase tracking-wider block">02 / HARDWARE & ENVIRONMENT</span>
+                        <h4 className="font-sans font-bold text-sm text-brand-navy">Premium Workspaces</h4>
+                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
+                          Dedicated modern physical offices globally equipped with high-spec developer hardware and a deep, collaborative engineering culture.
+                        </p>
+                      </div>
+
+                      <div className="bg-white border border-neutral-200/80 rounded-2xl p-5 shadow-3xs space-y-2">
+                        <span className="font-mono text-[9px] text-emerald-600 font-extrabold uppercase tracking-wider block">03 / REAL-TIME OVERLAP</span>
+                        <h4 className="font-sans font-bold text-sm text-brand-navy">Overlapping Sprints</h4>
+                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
+                          Engineers maintain an active daily overlap for real-time standups, instant feedback loops, and rapid PR cycle closures.
+                        </p>
+                      </div>
+
+                      <div className="bg-white border border-neutral-200/80 rounded-2xl p-5 shadow-3xs space-y-2">
+                        <span className="font-mono text-[9px] text-emerald-600 font-extrabold uppercase tracking-wider block">04 / DIRECT STAFF PROTOCOL</span>
+                        <h4 className="font-sans font-bold text-sm text-brand-navy">Direct Tool Integration</h4>
+                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
+                          Vetted staff join your Slack workspace, commit directly to your GitHub/GitLab repositories, and work directly as your in-house staff.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -452,15 +498,13 @@ export default function App() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-white p-4 rounded-xl border border-neutral-100 space-y-1">
-                        <span className="font-sans font-bold text-xs text-brand-navy block flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-brand-teal" />
+                        <span className="font-sans font-bold text-xs text-brand-navy block">
                           Zero Recruiter Noise
                         </span>
                         <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">Bypass long recruitment agency pipeline delays. Secure stable continuity.</p>
                       </div>
                       <div className="bg-white p-4 rounded-xl border border-neutral-100 space-y-1">
-                        <span className="font-sans font-bold text-xs text-brand-navy block flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="font-sans font-bold text-xs text-brand-navy block">
                           Unblocked Backlogs
                         </span>
                         <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">Re-activate complex feature shipping and satisfy scale demands safely.</p>
@@ -484,11 +528,11 @@ export default function App() {
                     <div className="grid grid-cols-3 gap-3">
                       <div className="bg-white border border-neutral-200 p-4 rounded-xl text-center">
                         <span className="font-mono text-xl font-bold text-brand-navy block">100%</span>
-                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">CET Alignment</span>
+                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Direct Alignment</span>
                       </div>
                       <div className="bg-white border border-neutral-200 p-4 rounded-xl text-center">
                         <span className="font-mono text-xl font-bold text-brand-teal block">8+ Hours</span>
-                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">EST Overlap</span>
+                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Daily Overlap</span>
                       </div>
                       <div className="bg-white border border-neutral-200 p-4 rounded-xl text-center">
                         <span className="font-mono text-xl font-bold text-emerald-600 block">0</span>
@@ -498,18 +542,16 @@ export default function App() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-white p-4 rounded-xl border border-neutral-100 space-y-1">
-                        <span className="font-sans font-bold text-xs text-brand-navy block flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-brand-teal" />
+                        <span className="font-sans font-bold text-xs text-brand-navy block">
                           Seamless Tool Sync
                         </span>
                         <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">Engineers join your Slack standups, use your Jira boards, and commit to your repos.</p>
                       </div>
                       <div className="bg-white p-4 rounded-xl border border-neutral-100 space-y-1">
-                        <span className="font-sans font-bold text-xs text-brand-navy block flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="font-sans font-bold text-xs text-brand-navy block">
                           Highly Vetted STEM Pool
                         </span>
-                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">North Macedonia possesses high concentrations of outstanding, technical STEM graduates.</p>
+                        <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">Our global networks possess high concentrations of outstanding, technical STEM graduates.</p>
                       </div>
                     </div>
                   </div>
@@ -543,23 +585,20 @@ export default function App() {
             
             {/* Header: Visual layout optimized for 3-second comprehension */}
             <div className="text-left max-w-2xl mb-16 space-y-4">
-              <span className="font-mono text-xs uppercase tracking-widest text-brand-teal bg-brand-teal/5 border border-brand-teal/20 px-3.5 py-1.5 rounded-full font-bold inline-block">
-                Tailored Engineering
-              </span>
               <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-brand-navy leading-tight">
                 Our core service lines
               </h2>
               <p className="text-brand-neutralgray text-sm md:text-base leading-relaxed font-normal">
-                Simplified, timezone-synchronized options built to address your exact sprint requirements.
+                Every model we deploy is engineered to dramatically reduce resource overhead, maximize workflow efficiency, and lead by example with clean, scalable technical execution.
               </p>
             </div>
 
-            {/* Grid of 3 clean, extremely scan-friendly service cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Grid of 4 clean, extremely scan-friendly service cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {SOLUTIONS.map((sol) => (
                 <div 
                   key={sol.id}
-                  className="border border-neutral-200 bg-white rounded-3xl p-6 md:p-8 flex flex-col justify-between transition-all duration-300 hover:border-brand-teal/30 hover:shadow-md relative overflow-hidden text-left group"
+                  className="border border-neutral-200 bg-white rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-brand-teal/30 hover:shadow-md relative overflow-hidden text-left group"
                 >
                   <div className="space-y-6">
                     {/* Header bar */}
@@ -568,6 +607,7 @@ export default function App() {
                         {sol.id === 'dedicated-hubs' && <Users className="w-5 h-5" />}
                         {sol.id === 'cto-as-a-service' && <Cpu className="w-5 h-5" />}
                         {sol.id === 'api-integrations' && <Code className="w-5 h-5" />}
+                        {sol.id === 'operational-efficiency' && <TrendingUp className="w-5 h-5" />}
                       </div>
                       <span className="font-mono text-[9px] text-brand-navy font-bold uppercase tracking-wider bg-brand-warmgray border border-neutral-200/80 px-2.5 py-1 rounded-md">
                         {sol.label}
@@ -719,7 +759,7 @@ export default function App() {
                     Long-Term Continuity
                   </h4>
                   <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                    We cultivate a high-retention culture in Skopje with competitive compensation, clear technical career paths, and beautiful workspace ecosystems.
+                    We cultivate a high-retention culture globally with competitive compensation, clear technical career paths, and beautiful workspace ecosystems.
                   </p>
                 </div>
               </div>
@@ -739,14 +779,11 @@ export default function App() {
               
               {/* Left text column */}
               <div className="lg:col-span-5 text-left space-y-6">
-                <span className="font-mono text-xs uppercase tracking-widest text-brand-teal bg-brand-teal/5 border border-brand-teal/20 px-3.5 py-1.5 rounded-full font-bold inline-block">
-                  Financial Symmetry
-                </span>
                 <h3 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-brand-navy leading-tight">
                   Save 30%+ per developer. No exceptions.
                 </h3>
                 <p className="text-brand-neutralgray text-sm md:text-base leading-relaxed font-normal">
-                  Establishing local subsidiaries or paying continuous traditional recruiter markups drains valuable product capital. Moxelle streamlines your operations, delivering dedicated senior engineering talent in Skopje at a fraction of the cost—with zero compliance risk.
+                  Establishing local subsidiaries or paying continuous traditional recruiter markups drains valuable product capital. Moxelle streamlines your operations, delivering dedicated senior engineering talent globally at a fraction of the cost—with zero compliance risk.
                 </p>
 
                 {/* Calculated Quick Facts */}
@@ -839,9 +876,9 @@ export default function App() {
                         <span className="text-[8px] text-brand-cream/80 leading-normal mt-1 font-mono font-bold bg-white/10 px-1.5 py-0.5 rounded">Flat Rate</span>
                       </div>
                       <div className="space-y-1">
-                        <h5 className="text-xs font-bold text-brand-teal">Moxelle Pod</h5>
+                        <h5 className="text-xs font-bold text-brand-teal">Moxelle Echo</h5>
                         <p className="text-[10px] text-brand-neutralgray max-w-[150px] mx-auto leading-relaxed font-normal">
-                          Dedicated developer, workspace, hardware, & compliance included.
+                          Dedicated developer, workspace, hardware, &amp; compliance included.
                         </p>
                       </div>
                     </div>
@@ -866,15 +903,87 @@ export default function App() {
           </div>
         </section>
 
+        {/* IP PROTECTION & SECURITY TRUST BANNER */}
+        <section className="py-20 bg-brand-navy text-white relative overflow-hidden border-y border-neutral-900">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.08),transparent_45%)] pointer-events-none" />
+          <div className="max-w-6xl mx-auto px-6 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              
+              <div className="lg:col-span-5 space-y-6 text-left">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[9px] font-extrabold uppercase tracking-wider">
+                  <ShieldCheck className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Airtight Compliance</span>
+                </div>
+                <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-white leading-tight">
+                  Intellectual property &amp; security is our <span className="text-emerald-400 font-display italic font-medium">Top 1 priority.</span>
+                </h2>
+                <p className="text-neutral-400 text-xs md:text-sm leading-relaxed font-normal">
+                  We guarantee total legal and operational safety. Every developer is employed under strict legal frameworks ensuring that your proprietary assets, source code, and trade secrets remain exclusively yours.
+                </p>
+              </div>
+
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 space-y-3 text-left">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-sans font-bold text-sm text-white">
+                    Contractual IP Assignment
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 leading-relaxed font-normal">
+                    100% of the code, patents, and technical documentations written by your Moxelle developers are contractually assigned directly to your firm under international master service agreements.
+                  </p>
+                </div>
+
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 space-y-3 text-left">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-sans font-bold text-sm text-white">
+                    Dedicated Secure Workspaces
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 leading-relaxed font-normal">
+                    Moxelle engineers operate from premium, access-controlled physical offices equipped with high-spec developer workstations, modern security infrastructure, and secure networks.
+                  </p>
+                </div>
+
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 space-y-3 text-left">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                    <Cpu className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-sans font-bold text-sm text-white">
+                    Direct Code Repository Ownership
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 leading-relaxed font-normal">
+                    No agency-side storage or proxy tools. Developers connect directly to your GitHub, GitLab, or cloud environments using security protocols, active SSH keys, and multi-factor authentication (MFA).
+                  </p>
+                </div>
+
+                <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 space-y-3 text-left">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <h4 className="font-sans font-bold text-sm text-white">
+                    Non-Disclosure Agreements
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 leading-relaxed font-normal">
+                    All engineers sign comprehensive, legally vetted NDAs and corporate IP protections before their first day of system onboarding, maintaining direct accountability.
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* PROCESS ROADMAP SECTION */}
         <section id="how-it-works" className="py-24 bg-white border-t border-neutral-200">
           <div className="max-w-6xl mx-auto px-6">
             
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 text-left">
               <div className="space-y-4">
-                <span className="font-mono text-xs uppercase tracking-widest text-brand-teal bg-brand-teal/5 border border-brand-teal/20 px-3.5 py-1.5 rounded-full font-bold inline-block">
-                  Launch Cadence
-                </span>
                 <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-brand-navy">
                   Our structured matching process
                 </h2>
@@ -921,28 +1030,12 @@ export default function App() {
               {/* Left Column: Contextual Confidence & Trust Panel */}
               <div className="lg:col-span-5 space-y-8 text-left">
                 <div className="space-y-4">
-                  <div className="inline-flex items-center gap-2 bg-brand-teal/5 border border-brand-teal/10 px-3 py-1 rounded-full text-brand-teal font-mono text-[10px] font-bold tracking-wider uppercase">
-                    Common Questions
-                  </div>
                   <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-brand-navy leading-tight">
                     Answers on operations, legal, & IP
                   </h2>
                   <p className="text-brand-neutralgray text-sm md:text-base leading-relaxed font-normal">
                     Everything you need to know about setting up, administering, and scaling your dedicated engineering hub with complete peace of mind.
                   </p>
-                </div>
-
-                {/* trust badge */}
-                <div className="bg-white/80 backdrop-blur-sm border border-neutral-200/80 rounded-2xl p-6 space-y-4 shadow-3xs">
-                  <div className="w-10 h-10 rounded-xl bg-brand-navy text-white flex items-center justify-center">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <h4 className="text-xs font-bold text-brand-navy uppercase tracking-wider font-mono">100% IP ASSIGNMENT</h4>
-                    <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                      All engineering master services agreements explicitly assign 100% of the code assets, patents, and work products directly to your firm under standard international contracts.
-                    </p>
-                  </div>
                 </div>
               </div>
 
@@ -1001,26 +1094,28 @@ export default function App() {
 
           <div className="max-w-4xl mx-auto px-6 text-center space-y-8 relative z-10">
             <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight max-w-2xl mx-auto leading-tight">
-              Ready to scale your product velocity?
+              Ready to scale your product or team?
             </h2>
             <p className="text-neutral-400 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-normal">
-              Schedule a strategy consultation. We'll outline candidate shortlists, team structures, timezone overlap, and direct flat-rate estimates with zero compliance friction.
+              Let's connect. Meet us, tell us your engineering pain points, and get friendly, honest advice on how to build your perfect team setup—completely free.
             </p>
             <div className="pt-4 flex flex-col items-center gap-3">
               <button
                 onClick={() => openBooking()}
                 className="w-full sm:w-auto bg-brand-teal hover:bg-brand-teal-dark text-white font-semibold text-sm px-8 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 group cursor-pointer"
               >
-                <span>Book your Sprints Strategy Call</span>
+                <span>Let's Talk — Get Free Advice</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
               <span className="text-xs text-neutral-500 font-mono">
-                No commitments or entity setup required. Fully compliant.
+                No commitments or sales pitches. Just direct, helpful engineering insights.
               </span>
             </div>
           </div>
         </section>
 
+          </>
+        )}
       </main>
 
       {/* Footer */}
@@ -1036,8 +1131,16 @@ export default function App() {
       {/* Floating Bottom-Right Corner Chat Notification */}
       <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end">
         {isChatOpen && (
-          <div className="mb-3 w-80 bg-white border border-neutral-200 rounded-2xl p-4 shadow-xl relative overflow-hidden text-left animate-fadeIn">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-brand-teal" />
+          <div 
+            onClick={() => {
+              if (chatTimerRef.current) {
+                clearTimeout(chatTimerRef.current);
+                chatTimerRef.current = null;
+              }
+            }}
+            className="mb-3 w-80 bg-white border border-neutral-200 rounded-2xl p-4 shadow-xl relative overflow-hidden text-left animate-fadeIn"
+          >
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-brand-pastelred" />
             
             <button 
               onClick={(e) => {
@@ -1052,8 +1155,8 @@ export default function App() {
             <div className="flex gap-3 items-start mt-1">
               <div className="relative shrink-0 mt-0.5">
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100&h=100"
-                  alt="Elena K."
+                  src={chatProfile?.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100&h=100"}
+                  alt={chatProfile?.name || "Elena K."}
                   className="w-10 h-10 rounded-full object-cover border border-neutral-200"
                 />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white" />
@@ -1061,17 +1164,18 @@ export default function App() {
 
               <div className="space-y-2">
                 <div>
-                  <h5 className="text-xs font-bold text-brand-navy font-sans">Elena K.</h5>
-                  <span className="text-[10px] text-brand-neutralgray font-mono block leading-tight font-medium">Sourcing Lead</span>
+                  <h5 className="text-xs font-bold text-brand-navy font-sans">{chatProfile?.name || "Elena K."}</h5>
+                  <span className="text-[10px] text-brand-neutralgray font-mono block leading-tight font-medium">{chatProfile?.title || "Sourcing Lead"}</span>
                 </div>
                 <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                  Hey there! Looking to embed elite, vetted senior developers and accelerate your backlog with full CET/EST overlap? Let's connect for a brief chat.
+                  Hey! I'm a senior engineer ready to integrate into your Slack, stands, and repositories to accelerate your backlog. Let's connect!
                 </p>
                 
                 <div className="flex gap-2 pt-1">
                   <button
-                    onClick={() => {
-                      openBooking({ teamSize: '1-3 developers', techStack: 'Any' });
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openBooking({ teamSize: '1 senior developer', techStack: `${chatProfile?.name || 'Any'} (${chatProfile?.title || 'Senior Developer'})` });
                       setIsChatOpen(false);
                     }}
                     className="bg-brand-teal hover:bg-brand-teal-dark text-white font-semibold text-[10px] px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-3xs"
@@ -1079,8 +1183,9 @@ export default function App() {
                     Schedule Call
                   </button>
                   <button
-                    onClick={() => {
-                      openBooking();
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openBooking({ teamSize: '1 senior developer', techStack: `${chatProfile?.name || 'Any'} (${chatProfile?.title || 'Senior Developer'})` });
                       setIsChatOpen(false);
                     }}
                     className="bg-neutral-100 hover:bg-neutral-200 text-brand-navy font-bold text-[10px] px-3 py-1.5 rounded-lg transition-all cursor-pointer"
@@ -1095,7 +1200,7 @@ export default function App() {
 
         {/* Launcher Button */}
         <button
-          onClick={() => setIsChatOpen(!isChatOpen)}
+          onClick={toggleChat}
           className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer relative transition-all duration-300 ${
             isChatOpen 
               ? 'bg-brand-navy hover:bg-brand-navy' 

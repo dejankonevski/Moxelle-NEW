@@ -23,7 +23,7 @@ export default function Footer() {
           <div className="md:col-span-5 space-y-4">
             <Logo variant="light" className="scale-[0.9] origin-left" />
             <p className="text-xs text-neutral-400 max-w-sm leading-relaxed font-normal">
-              Moxelle is the dedicated engineering hub partner for growing SaaS and product companies. We assemble, employ, and manage elite remote developer teams in Skopje, North Macedonia—fully integrated into your workflows.
+              Moxelle is the dedicated engineering hub partner for growing SaaS and product companies. We assemble, employ, and manage elite remote developer teams globally—fully integrated into your workflows.
             </p>
           </div>
 
@@ -57,9 +57,9 @@ export default function Footer() {
               OFFICE LOCATION
             </h5>
             <p className="text-xs text-neutral-300 leading-relaxed font-normal">
-              Moxelle DOOEL Skopje<br />
+              Moxelle DOO Skopje<br />
               Skopje, North Macedonia<br />
-              <span className="text-neutral-500 font-mono mt-1 block">CET / EST Alignment</span>
+              <span className="text-neutral-500 font-mono mt-1 block">Direct Alignment</span>
             </p>
           </div>
 

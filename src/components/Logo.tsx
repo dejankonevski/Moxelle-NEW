@@ -18,12 +18,12 @@ export default function Logo({ variant = 'dark', className = '' }: LogoProps) {
   return (
     <div className={`flex flex-col items-start ${className} select-none`}>
       <div className="flex items-baseline leading-none">
-        <span className="font-sans font-extrabold text-2xl tracking-tight text-brand-teal">M</span>
-        <span className={`font-sans font-bold text-2xl tracking-tight -ml-[1px] ${textColorClass}`}>oxelle</span>
+        <span className="font-sans font-extrabold text-[1.95rem] md:text-[2.25rem] tracking-tight text-brand-teal">M</span>
+        <span className={`font-sans font-bold text-[1.95rem] md:text-[2.25rem] tracking-tight -ml-[1px] ${textColorClass}`}>oxelle</span>
       </div>
-      <div className="flex items-center gap-[3px] text-[8px] font-sans font-normal tracking-wide -mt-[2px] self-end pr-[2px]">
+      <div className="flex items-center gap-[4px] text-[10px] md:text-[11px] font-sans font-normal tracking-wide -mt-[2px] self-end pr-[2px]">
         <span className={variant === 'dark' ? 'text-brand-navy/80' : 'text-white/80'}>consider</span>
-        <span className="text-brand-teal font-medium">it</span>
+        <span className="text-brand-teal font-semibold">it</span>
         <span className={variant === 'dark' ? 'text-brand-navy/80' : 'text-white/80'}>done</span>
       </div>
     </div>

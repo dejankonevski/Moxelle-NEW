@@ -90,7 +90,7 @@ export default function BookingModal({ isOpen, onClose, prefilled }: BookingModa
                   Book a Strategy Call
                 </h3>
                 <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                  Discuss your engineering bottlenecks, stack alignment, and developer bandwidth needs with our leadership team in Skopje.
+                  Discuss your engineering bottlenecks, stack alignment, and developer bandwidth needs with our leadership team.
                 </p>
               </div>
 

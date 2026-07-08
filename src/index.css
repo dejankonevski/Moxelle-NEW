@@ -6,13 +6,14 @@
   --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-brand-cream: #FCFBF9;
+  --color-brand-cream: #FDFDFD;
   --color-brand-teal: #00A19A;
   --color-brand-teal-dark: #00847E;
   --color-brand-navy: #26344E;
   --color-brand-midnight: #0E0D1E;
   --color-brand-neutralgray: #5A5A5A;
-  --color-brand-warmgray: #F5F4F0;
+  --color-brand-warmgray: #F7F7F6;
+  --color-brand-pastelred: #EF8275;
 }
 
 @layer utilities {
