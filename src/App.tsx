@@ -21,12 +21,12 @@ import {
   X,
   MessageSquare,
   Clock,
-  HeartHandshake
+  HeartHandshake,
+  RotateCw
 } from 'lucide-react';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
-import TalentDirectory from './components/TalentDirectory';
 import BookingModal from './components/BookingModal';
 import BlogPage from './components/BlogPage';
 
@@ -50,7 +50,15 @@ export default function App() {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Hero Talent Spotlight state
-  const [heroTalentIndex, setHeroTalentIndex] = useState<number>(0);
+  const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
+  
+  const toggleFlip = (name: string) => {
+    setFlippedCards((prev) => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
+  };
+
   const [isChatOpen, setIsChatOpen] = useState(true);
   const [chatProfile, setChatProfile] = useState<any>(null);
   const chatTimerRef = useRef<any>(null);
@@ -120,202 +128,432 @@ export default function App() {
         ) : (
           <>
         
-        {/* HERO SECTION WITH LIVE CANDIDATE SPOTLIGHTER */}
-        <section id="hero" className="relative pt-12 pb-20 overflow-hidden border-b border-neutral-200">
+        {/* HERO SECTION WITH COHESIVE VALUE PROPOSITION */}
+        <section id="hero" className="relative pt-20 pb-20 overflow-hidden border-b border-neutral-200">
           {/* Subtle fluid background gradients */}
           <div className="absolute top-[-10%] right-[-10%] w-[550px] h-[550px] bg-gradient-to-br from-brand-teal/5 to-transparent rounded-full blur-[140px] pointer-events-none" />
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-gradient-to-tr from-brand-teal/3 to-transparent rounded-full blur-[150px] pointer-events-none" />
 
-          <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
-            
-            {/* Left Column: Copy & Value Proposition */}
-            <div className="lg:col-span-6 space-y-8 text-left">
-              <div className="space-y-6">
-                <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brand-navy leading-[1.1]">
-                  Deploy elite <span className="text-brand-teal block italic font-medium font-display">senior developers</span> on-demand—while protecting your intellectual property.
-                </h1>
+          <div className="max-w-4xl mx-auto px-6 relative z-10 text-left space-y-8">
+            <div className="space-y-5">
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brand-navy leading-[1.12]">
+                Build your engineering hub in Europe <span className="text-brand-teal block italic font-medium font-display">and cut costs</span>.
+              </h1>
 
-                <p className="text-sm md:text-base text-brand-neutralgray font-normal leading-relaxed max-w-xl">
-                  Moxelle builds dedicated engineering teams globally—fully integrated into your daily Slack, Jira, and GitHub repositories under your direct guidance, with zero entity overhead.
+              <p className="text-sm md:text-base text-brand-neutralgray font-normal leading-relaxed max-w-2xl space-y-2">
+                <span className="font-bold text-brand-navy block text-base md:text-lg">
+                  Embedded senior engineering teams for growing SaaS companies.
+                </span>
+                <span>
+                  Stop hiring one engineer at a time. Build an embedded engineering hub in Europe with senior engineers fully integrated into your product team.
+                </span>
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
+              <button
+                onClick={() => openBooking()}
+                className="bg-brand-teal hover:bg-brand-teal-dark text-white font-bold text-xs px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm flex items-center justify-center gap-2 group cursor-pointer"
+              >
+                <span>Book a Strategy Call</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button
+                onClick={() => handleScrollTo('solutions')}
+                className="bg-white hover:bg-neutral-50 text-brand-navy border border-neutral-200/80 font-bold text-xs px-7 py-3.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <span>Explore Services</span>
+              </button>
+            </div>
+
+            {/* Premium Attention-Grabbing Value Showcases - Big, Bold & Highly Attractive */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-3">
+              {/* Showcase Card 1 */}
+              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-3xs hover:border-brand-teal/30 hover:shadow-2xs transition-all duration-300 text-left relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-brand-teal/5 to-transparent rounded-full pointer-events-none" />
+                <div className="space-y-2">
+                  <div className="text-3xl font-extrabold tracking-tight text-brand-teal font-display">
+                    Top 4%
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-display font-bold text-xs text-brand-navy">
+                      Strict Technical Vetting
+                    </h4>
+                    <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
+                      Only elite software engineers with deep computer science fundamentals and verified production expertise.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Showcase Card 2 */}
+              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-3xs hover:border-emerald-500/20 hover:shadow-2xs transition-all duration-300 text-left relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-emerald-500/5 to-transparent rounded-full pointer-events-none" />
+                <div className="space-y-2">
+                  <div className="text-3xl font-extrabold tracking-tight text-emerald-600 font-display">
+                    Save 30%+
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-display font-bold text-xs text-brand-navy">
+                      Capital Efficiency Edge
+                    </h4>
+                    <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
+                      Bypass recruitment fees, payroll taxes, and office overhead. Flat-rate, EOR-compliant scaling.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* COST EFFICIENCY & CAPITAL DEPLOYMENT SECTION */}
+        <section id="cost-efficiency" className="py-24 bg-brand-cream/30 border-b border-neutral-200 relative overflow-hidden">
+          {/* Ambient organic light effects */}
+          <div className="absolute top-1/2 left-[-10%] w-[500px] h-[500px] bg-brand-teal/5 rounded-full blur-[130px] pointer-events-none" />
+          <div className="absolute top-0 right-[-10%] w-[400px] h-[400px] bg-brand-teal/3 rounded-full blur-[120px] pointer-events-none" />
+          
+          <div className="max-w-6xl mx-auto px-6 relative z-10">
+            {/* Centered Section Header to keep content clean, minimal and quick to digest */}
+            <div className="text-center max-w-2xl mx-auto mb-14 space-y-4">
+              <span className="font-mono text-[10px] font-bold bg-brand-teal/10 text-brand-teal border border-brand-teal/20 px-3 py-1 rounded-md uppercase tracking-wider">
+                Financial Hyper-Efficiency
+              </span>
+              <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-brand-navy">
+                CUT costs, double your runway.
+              </h2>
+              <p className="text-sm text-brand-neutralgray leading-relaxed max-w-lg mx-auto">
+                Compare the stark financial reality. Legacy hiring is packed with hidden liabilities. Moxelle delivers a flat-rate, fully compliant dedicated hub.
+              </p>
+            </div>
+
+            {/* Side-by-Side Pricing Plan Style Comparison Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto">
+              
+              {/* Box A: WHAT THEY PAY (Traditional In-House) */}
+              <div className="bg-white border-2 border-neutral-200 rounded-[2rem] p-8 flex flex-col justify-between hover:border-neutral-300 transition-all duration-300 relative group shadow-sm">
+                <div className="space-y-6">
+                  {/* Card Header */}
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <span className="font-mono text-[10px] text-rose-500 font-extrabold uppercase tracking-widest bg-rose-50 border border-rose-100 px-2.5 py-1 rounded">
+                        WHAT THEY PAY (LEGACY)
+                      </span>
+                      <h3 className="font-display font-extrabold text-xl text-brand-navy mt-2.5">
+                        Traditional US/EU Hire
+                      </h3>
+                    </div>
+                    {/* Tiny visual indicators of overhead */}
+                    <span className="text-xl">⚠️</span>
+                  </div>
+
+                  {/* Pricing Display */}
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-1 text-neutral-400">
+                      <span className="font-display font-black text-4xl md:text-5xl text-neutral-500 tracking-tight">$125,000</span>
+                      <span className="font-mono text-sm font-semibold">/ yr</span>
+                    </div>
+                    <p className="text-xs text-neutral-400 font-medium">Estimated average per Senior Engineer</p>
+                  </div>
+
+                  {/* Obligations & Hidden Liabilities List */}
+                  <div className="space-y-4 border-t border-neutral-100 pt-5 text-left">
+                    <h4 className="font-sans font-bold text-xs text-brand-navy uppercase tracking-wider">
+                      Your Overhead &amp; Obligations:
+                    </h4>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2 text-xs text-brand-neutralgray">
+                        <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-neutral-700">Recruiter Margins:</strong> Upfront fee of 15% to 20% ($15k+ per candidate)
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-brand-neutralgray">
+                        <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-neutral-700">Taxes &amp; Benefits:</strong> Direct payroll tax, pension, and health insurance overhead
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-brand-neutralgray">
+                        <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-neutral-700">Legal Risk:</strong> Full localized employer liability and complex local termination laws
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-brand-neutralgray">
+                        <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-neutral-700">Administrative Costs:</strong> Hardware logistics, local HR compliance, desk overhead
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-brand-neutralgray">
+                        <X className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-neutral-700">Hiring Delay:</strong> Average 45+ days recruitment cycles with high initial attrition risk
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-4 border-t border-neutral-100 text-center">
+                  <span className="text-[10px] font-mono text-neutral-400 font-bold uppercase tracking-wider">
+                    High administrative &amp; legal friction
+                  </span>
+                </div>
+              </div>
+
+              {/* Box B: WHAT YOU SHOULD PAY (Moxelle Dedicated Hub) */}
+              <div className="bg-brand-navy border-3 border-brand-teal rounded-[2rem] p-8 flex flex-col justify-between hover:border-emerald-400 hover:shadow-xl transition-all duration-300 relative overflow-hidden text-white shadow-lg">
+                {/* Glowing decorative effect */}
+                <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-brand-teal/20 to-transparent rounded-full pointer-events-none" />
+                
+                <div className="space-y-6 relative z-10">
+                  {/* Card Header with circular callout */}
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <span className="font-mono text-[10px] text-brand-teal font-extrabold uppercase tracking-widest bg-brand-teal/10 border border-brand-teal/20 px-2.5 py-1 rounded">
+                        WHAT YOU SHOULD PAY
+                      </span>
+                      <h3 className="font-display font-extrabold text-xl text-white mt-2.5">
+                        Moxelle Dedicated Hub
+                      </h3>
+                    </div>
+                    
+                    {/* THE ATTRACTIVE BIG CIRCLE FOR 3-SECOND COMPREHENSION */}
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-500 to-brand-teal text-white flex flex-col items-center justify-center shadow-lg border border-white/20 shrink-0 transform -rotate-6 group-hover:rotate-0 transition-transform duration-300">
+                      <span className="font-mono text-[9px] font-bold uppercase tracking-widest leading-none">CUT</span>
+                      <span className="font-display font-black text-sm leading-none mt-0.5">37.6%</span>
+                      <span className="font-mono text-[8px] font-medium leading-none mt-0.5">COSTS</span>
+                    </div>
+                  </div>
+
+                  {/* Pricing Display */}
+                  <div className="space-y-1">
+                    <div className="flex items-baseline gap-1 text-brand-teal">
+                      <span className="font-display font-black text-4xl md:text-5xl text-brand-teal tracking-tight">$78,000</span>
+                      <span className="font-mono text-sm font-semibold text-neutral-300">/ yr</span>
+                    </div>
+                    <p className="text-xs text-neutral-300 font-medium">Flat-rate, all-inclusive pricing per developer</p>
+                  </div>
+
+                  {/* Value & Compliance Included List */}
+                  <div className="space-y-4 border-t border-white/10 pt-5 text-left">
+                    <h4 className="font-sans font-bold text-xs text-brand-teal uppercase tracking-wider">
+                      Everything Completely Included:
+                    </h4>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2 text-xs text-neutral-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-white">Zero Extra Fees:</strong> Flat monthly invoices cover vetting, HR operations, and management.
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-neutral-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-white">Elite Talent Guaranteed:</strong> Rigorously vetted senior developers matched to your specific stack.
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-neutral-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-white">Full Legal/EOR Compliance:</strong> Zero legal exposure; we manage localized employment, benefits, &amp; taxes.
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-neutral-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-white">Enterprise Security Setup:</strong> Shipped company-owned secure laptops and workspaces included.
+                        </div>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-neutral-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-white">Rapid Onboarding:</strong> Sync'd into standups and committing high-quality code in under 21 days.
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-4 border-t border-white/10 text-center">
+                  <span className="text-[10px] font-mono text-emerald-400 font-extrabold uppercase tracking-wider flex items-center justify-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    RECOMMENDED CAPITAL CHOICE
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Big Summary Savings Panel to lock in 3-second understanding */}
+            <div className="mt-12 bg-brand-navy text-white rounded-2xl p-6 md:p-8 max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6 border border-brand-teal/20 shadow-md">
+              <div className="text-center sm:text-left space-y-1.5">
+                <span className="text-[9px] text-brand-teal font-mono font-extrabold uppercase tracking-wider block">CAPITAL RETENTION SCORE</span>
+                <h4 className="font-display font-extrabold text-xl md:text-2xl text-white">
+                  Save <span className="text-brand-teal font-black">$47,000 every single year</span> per developer.
+                </h4>
+                <p className="text-xs text-neutral-300">
+                  Cut overhead costs, reinvest back into runway, and accelerate your core roadmap with confidence.
                 </p>
               </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-                <button
-                  onClick={() => openBooking()}
-                  className="bg-brand-teal hover:bg-brand-teal-dark text-white font-semibold text-xs px-7 py-4 rounded-xl transition-all duration-200 shadow-sm flex items-center justify-center gap-2 group cursor-pointer"
-                >
-                  <span>Book a Strategy Call</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button
-                  onClick={() => handleScrollTo('solutions')}
-                  className="bg-white hover:bg-neutral-50 text-brand-navy border border-neutral-200/80 font-semibold text-xs px-7 py-4 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <span>Explore Services</span>
-                </button>
-              </div>
-
-              {/* Value Showcases */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 max-w-xl">
-                {/* Standard Card 1 */}
-                <div className="bg-brand-warmgray/50 border border-neutral-200/60 rounded-2xl p-5 space-y-2 relative overflow-hidden transition-all hover:translate-y-[-2px] hover:border-brand-teal/20 flex flex-col justify-between">
-                  <div className="flex justify-between items-center">
-                    <span className="font-mono text-2xl font-black text-brand-teal">
-                      Top 4%
-                    </span>
-                    <span className="w-2 h-2 rounded-full bg-brand-teal shrink-0 animate-pulse" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="font-sans font-bold text-xs text-brand-navy">
-                      Elite Technical Shortlists
-                    </h4>
-                    <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
-                      Only highly skilled software engineers with robust computer science backgrounds and verified production experience.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Standard Card 2 */}
-                <div className="bg-brand-pastelred/5 border border-brand-pastelred/20 rounded-2xl p-5 space-y-2 relative overflow-hidden transition-all hover:translate-y-[-2px] hover:border-brand-pastelred/30 flex flex-col justify-between">
-                  <div className="flex justify-between items-center">
-                    <span className="font-mono text-2xl font-black text-brand-pastelred">
-                      30%+
-                    </span>
-                    <span className="w-2 h-2 rounded-full bg-brand-pastelred shrink-0" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="font-sans font-bold text-xs text-brand-navy">
-                      Capital Efficiency
-                    </h4>
-                    <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
-                      Secure dedicated, senior-grade engineers fully integrated into your workflow with substantial cost savings.
-                    </p>
-                  </div>
-                </div>
+              <div className="shrink-0 bg-white/5 border border-white/10 rounded-xl p-4 text-center min-w-[200px]">
+                <span className="text-[8px] text-neutral-400 font-mono font-bold uppercase tracking-widest block">FOR A 5-DEV TEAM</span>
+                <span className="font-display font-black text-2xl text-emerald-400 mt-1 block">+$235,000 / yr</span>
+                <span className="text-[10px] text-neutral-300 block mt-0.5">Retained Runway Capital</span>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Right Column: Dynamic Moxelle Team Spotlight */}
-            <div className="lg:col-span-6 flex flex-col justify-between bg-white border border-neutral-200 rounded-[2rem] p-6 md:p-8 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-brand-teal/5 to-transparent rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="space-y-6 relative z-10">
-                
-                <div className="flex items-center justify-between border-b border-neutral-100 pb-4">
-                  <div className="text-left">
-                    <h4 className="font-display font-bold text-base text-brand-navy flex items-center gap-2">
-                      <span>Moxelle Elite: Senior Spotlight</span>
-                    </h4>
-                    <p className="text-xs text-brand-neutralgray mt-0.5">
-                      Select a featured engineer below to review their tech stack and immediately inquire to deploy them onto your core product.
-                    </p>
-                  </div>
-                </div>
+        {/* FEATURED SENIOR DEVELOPERS SECTION */}
+        <section id="featured-developers" className="py-24 bg-white border-b border-neutral-200 relative overflow-hidden">
+          <div className="absolute top-1/2 right-[-10%] w-[500px] h-[500px] bg-brand-teal/4 rounded-full blur-[130px] pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-6 relative z-10 text-left space-y-10">
+            <div className="text-center max-w-2xl mx-auto space-y-4">
+              <span className="font-mono text-[10px] font-bold bg-brand-teal/10 text-brand-teal border border-brand-teal/20 px-3 py-1 rounded-md uppercase tracking-wider">
+                Vetted Engineers
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-brand-navy">
+                Meet our featured senior developers
+              </h2>
+              <p className="text-sm text-brand-neutralgray leading-relaxed max-w-lg mx-auto text-center">
+                Hover or click on any profile card to instantly flip it and inspect verified vetting, skills, and timezone details.
+              </p>
+            </div>
 
-                {/* Candidate Selector Tabs */}
-                <div className="flex flex-wrap gap-1.5">
-                  {heroTalentList.map((talent, idx) => {
-                    const isSelected = heroTalentIndex === idx;
-                    return (
-                      <button
-                        key={talent.name}
-                        onClick={() => setHeroTalentIndex(idx)}
-                        className={`text-[10px] font-mono font-bold py-2 px-4 rounded-xl border transition-all cursor-pointer flex items-center gap-1.5 ${
-                          isSelected
-                            ? 'bg-brand-navy border-brand-navy text-white shadow-xs'
-                            : 'bg-brand-warmgray/30 border-neutral-200/80 text-brand-neutralgray hover:bg-neutral-50 hover:text-brand-navy'
-                        }`}
-                      >
-                        <span>{talent.name}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Selected Lead Profile Display */}
-                <div className="bg-brand-warmgray border border-neutral-200/80 rounded-2xl p-5 space-y-4 relative overflow-hidden text-left">
-                  <div className="flex gap-4 items-start">
-                    <img
-                      src={heroTalentList[heroTalentIndex].avatar}
-                      alt={heroTalentList[heroTalentIndex].name}
-                      className="w-14 h-14 rounded-xl object-cover border border-neutral-200 shadow-3xs"
-                    />
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-display font-bold text-sm text-brand-navy">
-                          {heroTalentList[heroTalentIndex].name}
-                        </span>
-                        <span className="text-[9px] font-mono bg-brand-teal/10 text-brand-teal border border-brand-teal/15 px-1.5 py-0.5 rounded font-semibold uppercase tracking-wider">
-                          Verified Senior Elite
-                        </span>
-                      </div>
-                      
-                      <p className="text-xs font-semibold text-brand-teal leading-tight">
-                        {heroTalentList[heroTalentIndex].title}
-                      </p>
-                      
-                      <div className="flex items-center gap-1.5 text-[10px] text-brand-neutralgray font-mono">
-                        <span>{heroTalentList[heroTalentIndex].experience} Experience</span>
-                        <span>&bull;</span>
-                        <span>{heroTalentList[heroTalentIndex].time}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Contractual IP Assignment */}
-                  <div className="space-y-1 border-t border-neutral-200/60 pt-3">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-teal" />
-                      <span className="text-[9px] font-mono text-brand-teal uppercase tracking-wider font-bold">
-                        Airtight IP Protection &amp; Assignment
-                      </span>
-                    </div>
-                    <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                      {heroTalentList[heroTalentIndex].ipGuarantee}
-                    </p>
-                  </div>
-
-                  {/* Skills badges */}
-                  <div className="flex flex-wrap gap-1">
-                    {heroTalentList[heroTalentIndex].skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-[10px] font-mono bg-white text-brand-neutralgray border border-neutral-200 px-2 py-0.5 rounded-md"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* UNIFIED PREMIUM ENGAGEMENT ACTIONS */}
-                <div className="space-y-3.5">
-                  <div className="bg-emerald-500/[0.02] border border-emerald-500/10 rounded-xl p-3.5 text-left">
-                    <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
-                      <span className="font-semibold text-brand-navy">Onboarding Window: </span> 
-                      {heroTalentList[heroTalentIndex].name} is prepared to integrate into your daily Standups, Slack, and repositories within 14-21 days of strategy booking.
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => openBooking({ teamSize: '1 senior developer', techStack: `${heroTalentList[heroTalentIndex].name} (${heroTalentList[heroTalentIndex].title})` })}
-                    className="w-full bg-brand-navy hover:bg-brand-teal text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+            {/* Responsive Tinder-like Cards Grid - Centered & Premium */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+              {heroTalentList.map((talent) => {
+                const isFlipped = !!flippedCards[talent.name];
+                return (
+                  <div
+                    key={talent.name}
+                    className="perspective-1000 w-full h-[365px] group"
+                    onMouseEnter={() => setFlippedCards((prev) => ({ ...prev, [talent.name]: true }))}
+                    onMouseLeave={() => setFlippedCards((prev) => ({ ...prev, [talent.name]: false }))}
                   >
-                    <span>Deploy {heroTalentList[heroTalentIndex].name} Onto Your Team</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
+                    {/* 3D Flippable Wrapper */}
+                    <div
+                      className={`relative w-full h-full transition-transform duration-500 preserve-3d cursor-pointer ${
+                        isFlipped ? 'rotate-y-180' : ''
+                      }`}
+                      onClick={() => toggleFlip(talent.name)}
+                    >
+                      {/* FRONT FACE */}
+                      <div className="absolute inset-0 w-full h-full backface-hidden bg-white border-2 border-neutral-200/80 rounded-[1.75rem] p-5 flex flex-col justify-between hover:border-brand-teal/50 hover:shadow-md transition-all duration-300">
+                        {/* Ambient glow accent */}
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-brand-teal/10 to-transparent rounded-full pointer-events-none" />
+                        
+                        <div className="space-y-4">
+                          {/* Header with larger avatar and bold titles */}
+                          <div className="flex gap-4 items-center">
+                            <img
+                              src={talent.avatar}
+                              alt={talent.name}
+                              className="w-14 h-14 rounded-2xl object-cover border border-neutral-100 shadow-2xs shrink-0"
+                            />
+                            <div className="min-w-0">
+                              <h4 className="font-display font-extrabold text-lg md:text-xl text-brand-navy truncate">
+                                {talent.name}
+                              </h4>
+                              <p className="text-sm font-extrabold text-brand-teal truncate mt-1">
+                                {talent.title}
+                              </p>
+                            </div>
+                          </div>
 
-              </div>
+                          {/* Core details with enlarged text */}
+                          <div className="space-y-2.5 border-t border-b border-neutral-100/80 py-3.5 text-sm text-brand-neutralgray">
+                            <div className="flex justify-between items-center">
+                              <span className="font-mono text-xs text-neutral-400">Experience:</span>
+                              <span className="font-bold text-brand-navy text-sm">{talent.experience}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="font-mono text-xs text-neutral-400">Overlap:</span>
+                              <span className="font-bold text-emerald-600 text-sm flex items-center gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                Full Sync (Daily)
+                              </span>
+                            </div>
+                          </div>
 
-              <div className="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between relative z-10 text-[10px] font-mono text-neutral-400 font-semibold">
-                <span>Real-Time Direct Alignment</span>
-                <span>Secure IP Assignment</span>
-              </div>
+                          {/* Larger, clear skills badges */}
+                          <div className="flex flex-wrap gap-1.5 pt-1">
+                            {talent.skills.slice(0, 3).map((skill) => (
+                              <span
+                                key={skill}
+                                className="text-xs font-mono bg-neutral-100 text-brand-neutralgray border border-neutral-200/50 px-2.5 py-1 rounded-md font-bold"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                            {talent.skills.length > 3 && (
+                              <span className="text-xs font-mono bg-brand-teal/5 text-brand-teal border border-brand-teal/10 px-2.5 py-1 rounded-md font-extrabold">
+                                +{talent.skills.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="pt-3 border-t border-neutral-100 flex items-center justify-between text-neutral-400 text-xs font-mono font-bold">
+                          <span className="text-[11px] text-neutral-400 font-bold">Hover or click to rotate</span>
+                          <span className="text-brand-teal flex items-center gap-1 text-xs hover:underline">
+                            Full Details <RotateCw className="w-3.5 h-3.5 animate-spin-slow" />
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* BACK FACE */}
+                      <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-brand-navy text-white rounded-[1.75rem] p-5 flex flex-col justify-between border-2 border-brand-teal/50 shadow-lg">
+                        <div className="space-y-3.5 text-left">
+                          <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                            <span className="text-[10px] font-mono text-brand-teal font-extrabold uppercase tracking-widest">Verified Credentials</span>
+                            <span className="text-[10px] font-mono text-emerald-400 font-extrabold bg-white/5 px-2 py-0.5 rounded border border-emerald-400/20">ELITE PASSED</span>
+                          </div>
+
+                          {/* Vetting highlights with larger readable typography */}
+                          <div className="space-y-2 text-xs text-neutral-200">
+                            <div className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-brand-teal shrink-0" />
+                              <span className="font-bold">Stage 1: Rigorous CS Vetting</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-brand-teal shrink-0" />
+                              <span className="font-bold">Stage 2: Live System Design &amp; Coding</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-brand-teal shrink-0" />
+                              <span className="font-bold">Stage 3: Fluent English Overlap Sync</span>
+                            </div>
+                          </div>
+
+                          <p className="text-[11px] text-neutral-300 leading-normal italic pt-2 border-t border-white/5 line-clamp-3">
+                            {talent.ipGuarantee}
+                          </p>
+                        </div>
+
+                        <div className="pt-2 border-t border-white/10 flex gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openBooking({ teamSize: '1 senior developer', techStack: `${talent.name} (${talent.title})` });
+                            }}
+                            className="w-full bg-brand-teal hover:bg-brand-teal-dark text-white font-sans text-xs font-extrabold py-2.5 px-3 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-1 shadow-md hover:shadow-lg hover:-translate-y-0.5 transform duration-200"
+                          >
+                            <span>Deploy {talent.name.split(' ')[0]}</span>
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-
           </div>
         </section>
 
@@ -356,7 +594,7 @@ export default function App() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
               
               {/* Left Column: Selector buttons */}
-              <div className="lg:col-span-5 flex flex-col justify-between gap-4">
+              <div className="lg:col-span-5 flex flex-col justify-start gap-4">
                 {[
                   {
                     id: 'q1' as const,
@@ -594,29 +832,29 @@ export default function App() {
             </div>
 
             {/* Grid of 4 clean, extremely scan-friendly service cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {SOLUTIONS.map((sol) => (
                 <div 
                   key={sol.id}
-                  className="border border-neutral-200 bg-white rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-brand-teal/30 hover:shadow-md relative overflow-hidden text-left group"
+                  className="border border-neutral-200 bg-white rounded-2xl p-5 md:p-6 flex flex-col justify-between transition-all duration-300 hover:border-brand-teal/30 hover:shadow-xs relative overflow-hidden text-left group"
                 >
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     {/* Header bar */}
                     <div className="flex justify-between items-center">
-                      <div className="bg-brand-navy text-white p-3.5 rounded-xl">
-                        {sol.id === 'dedicated-hubs' && <Users className="w-5 h-5" />}
-                        {sol.id === 'cto-as-a-service' && <Cpu className="w-5 h-5" />}
-                        {sol.id === 'api-integrations' && <Code className="w-5 h-5" />}
-                        {sol.id === 'operational-efficiency' && <TrendingUp className="w-5 h-5" />}
+                      <div className="bg-brand-navy text-white p-2.5 rounded-lg">
+                        {sol.id === 'dedicated-hubs' && <Users className="w-4 h-4" />}
+                        {sol.id === 'cto-as-a-service' && <Cpu className="w-4 h-4" />}
+                        {sol.id === 'api-integrations' && <Code className="w-4 h-4" />}
+                        {sol.id === 'operational-efficiency' && <TrendingUp className="w-4 h-4" />}
                       </div>
-                      <span className="font-mono text-[9px] text-brand-navy font-bold uppercase tracking-wider bg-brand-warmgray border border-neutral-200/80 px-2.5 py-1 rounded-md">
+                      <span className="font-mono text-[9px] text-brand-navy font-bold uppercase tracking-wider bg-brand-warmgray border border-neutral-200/80 px-2 py-0.5 rounded">
                         {sol.label}
                       </span>
                     </div>
 
                     {/* Simplified descriptions for 3-second understanding */}
-                    <div className="space-y-2">
-                      <h3 className="font-display text-xl font-bold tracking-tight text-brand-navy">
+                    <div className="space-y-1.5">
+                      <h3 className="font-display text-lg font-bold tracking-tight text-brand-navy">
                         {sol.title}
                       </h3>
                       <p className="text-xs text-brand-neutralgray leading-relaxed font-normal">
@@ -625,9 +863,9 @@ export default function App() {
                     </div>
 
                     {/* Quick Bullet List */}
-                    <ul className="space-y-2.5 pt-4 border-t border-neutral-100">
+                    <ul className="space-y-2 pt-3 border-t border-neutral-100">
                       {sol.benefits.map((benefit, bIdx) => (
-                        <li key={bIdx} className="flex items-start gap-2.5 text-xs text-brand-neutralgray leading-relaxed font-normal">
+                        <li key={bIdx} className="flex items-start gap-2 text-xs text-brand-neutralgray leading-relaxed font-normal">
                           <Check className="w-3.5 h-3.5 text-brand-teal shrink-0 mt-0.5" />
                           <span>{benefit}</span>
                         </li>
@@ -635,7 +873,7 @@ export default function App() {
                     </ul>
                   </div>
 
-                  <div className="pt-6 mt-6 border-t border-neutral-50">
+                  <div className="pt-4 mt-4 border-t border-neutral-100">
                     <button
                       onClick={() => openBooking({ teamSize: '1-3 developers', techStack: sol.title })}
                       className="text-xs font-bold text-brand-navy hover:text-brand-teal transition-colors flex items-center gap-1 cursor-pointer"
@@ -650,9 +888,6 @@ export default function App() {
 
           </div>
         </section>
-
-        {/* TOPTAL-STYLE INTERACTIVE TALENT DIRECTORY */}
-        <TalentDirectory onInquire={(prefilled) => openBooking(prefilled)} />
 
         {/* WHY MOXELLE SECTION (Strategic Differentiation) */}
         <section id="why-moxelle" className="py-24 bg-brand-cream border-b border-neutral-200 relative overflow-hidden">
@@ -762,140 +997,6 @@ export default function App() {
                     We cultivate a high-retention culture globally with competitive compensation, clear technical career paths, and beautiful workspace ecosystems.
                   </p>
                 </div>
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-        {/* COST EFFICIENCY & CAPITAL DEPLOYMENT SECTION */}
-        <section id="cost-efficiency" className="py-24 bg-white border-b border-neutral-200 relative overflow-hidden">
-          <div className="absolute top-1/2 left-[-10%] w-[500px] h-[500px] bg-brand-teal/4 rounded-full blur-[130px] pointer-events-none" />
-          <div className="absolute top-0 right-[-10%] w-[400px] h-[400px] bg-brand-teal/2 rounded-full blur-[120px] pointer-events-none" />
-          <div className="max-w-6xl mx-auto px-6 relative z-10">
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              
-              {/* Left text column */}
-              <div className="lg:col-span-5 text-left space-y-6">
-                <h3 className="font-display text-3xl md:text-5xl font-bold tracking-tight text-brand-navy leading-tight">
-                  Save 30%+ per developer. No exceptions.
-                </h3>
-                <p className="text-brand-neutralgray text-sm md:text-base leading-relaxed font-normal">
-                  Establishing local subsidiaries or paying continuous traditional recruiter markups drains valuable product capital. Moxelle streamlines your operations, delivering dedicated senior engineering talent globally at a fraction of the cost—with zero compliance risk.
-                </p>
-
-                {/* Calculated Quick Facts */}
-                <div className="space-y-4 pt-2">
-                  <div className="flex gap-4 items-start bg-brand-cream/50 p-4 rounded-xl border border-neutral-200/60 shadow-3xs">
-                    <div className="w-10 h-10 rounded-xl bg-brand-teal/10 text-brand-teal flex items-center justify-center shrink-0 font-bold font-mono text-sm">
-                      $47k+
-                    </div>
-                    <div>
-                      <h4 className="font-sans font-bold text-sm text-brand-navy">Saved Per Engineer, Every Year</h4>
-                      <p className="text-xs text-brand-neutralgray leading-relaxed mt-0.5 font-normal">
-                        Direct savings on salary premiums, local employer taxes, and recruitment fees.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 items-start bg-brand-cream/50 p-4 rounded-xl border border-neutral-200/60 shadow-3xs">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0 font-bold font-mono text-sm">
-                      $235k
-                    </div>
-                    <div>
-                      <h4 className="font-sans font-bold text-sm text-brand-navy">Annual Five-Developer Team Savings</h4>
-                      <p className="text-xs text-brand-neutralgray leading-relaxed mt-0.5 font-normal">
-                        More capital to reinvest directly into aggressive roadmap acceleration and product design.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* BUTTON: Request Custom Financial Comparison REMOVED per user request */}
-              </div>
-
-              {/* Right graphical bubble column (No inputs, already calculated) */}
-              <div className="lg:col-span-7 space-y-8">
-                
-                {/* Visual Bubble Graph Container */}
-                <div className="bg-brand-cream/60 border border-neutral-200/80 rounded-3xl p-6 md:p-8 text-left relative overflow-hidden flex flex-col justify-between min-h-[380px]">
-                  
-                  {/* Decorative background circle */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-neutral-100 rounded-full blur-3xl pointer-events-none" />
-                  
-                  <div className="flex justify-between items-center pb-4 border-b border-neutral-200/75 relative z-10">
-                    <span className="font-mono text-[9px] text-neutral-400 font-bold uppercase tracking-wider">
-                      CAPITAL OUTFLOW PER ENGINEER (ANNUAL ESTIMATES)
-                    </span>
-                    
-                    <span className="font-mono text-[9px] text-brand-teal font-extrabold uppercase tracking-wider bg-brand-teal/10 border border-brand-teal/25 px-2.5 py-1 rounded-md shadow-3xs">
-                      30%+ SAVINGS
-                    </span>
-                  </div>
-
-                  {/* Bubbles Graphic Display */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 py-8 relative z-10 items-center">
-                    
-                    {/* Bubble 1: US/EU Local */}
-                    <div className="flex flex-col items-center text-center space-y-4">
-                      <div className="w-28 h-28 rounded-full bg-brand-navy text-white flex flex-col items-center justify-center p-4 border border-neutral-800 shadow-sm relative">
-                        <span className="text-[9px] uppercase font-mono tracking-widest text-neutral-400 font-bold">Local Hire</span>
-                        <span className="font-sans font-bold text-base leading-tight mt-1">$125k+</span>
-                        <span className="text-[8px] text-neutral-400 leading-tight mt-0.5">Full overhead</span>
-                      </div>
-                      <div className="space-y-1">
-                        <h5 className="text-xs font-bold text-brand-navy">Traditional Local</h5>
-                        <p className="text-[10px] text-brand-neutralgray max-w-[150px] mx-auto leading-relaxed font-normal">
-                          Requires high local taxes, recruitment fees, and local office leases.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bubble 2: Legacy Broker */}
-                    <div className="flex flex-col items-center text-center space-y-4">
-                      <div className="w-24 h-24 rounded-full bg-neutral-200 text-brand-navy flex flex-col items-center justify-center p-4 border border-neutral-300 shadow-sm relative">
-                        <span className="text-[8px] uppercase font-mono tracking-wider text-neutral-600 font-semibold">Brokerage</span>
-                        <span className="font-sans font-bold text-sm leading-tight mt-1">$96k</span>
-                        <span className="text-[8px] text-neutral-500 leading-tight mt-0.5">High markup</span>
-                      </div>
-                      <div className="space-y-1">
-                        <h5 className="text-xs font-bold text-brand-navy">Legacy Agency</h5>
-                        <p className="text-[10px] text-brand-neutralgray max-w-[150px] mx-auto leading-relaxed font-normal">
-                          Unmanaged outsourcing with high developer attrition and markups.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bubble 3: Moxelle */}
-                    <div className="flex flex-col items-center text-center space-y-4">
-                      <div className="w-32 h-32 rounded-full bg-brand-teal text-white flex flex-col items-center justify-center p-5 border-4 border-white/20 shadow-md relative overflow-hidden">
-                        <span className="text-[9px] uppercase font-mono tracking-widest text-brand-cream/80 font-bold">Moxelle Hub</span>
-                        <span className="font-sans font-extrabold text-xl leading-none mt-1 text-white">$78k</span>
-                        <span className="text-[8px] text-brand-cream/80 leading-normal mt-1 font-mono font-bold bg-white/10 px-1.5 py-0.5 rounded">Flat Rate</span>
-                      </div>
-                      <div className="space-y-1">
-                        <h5 className="text-xs font-bold text-brand-teal">Moxelle Echo</h5>
-                        <p className="text-[10px] text-brand-neutralgray max-w-[150px] mx-auto leading-relaxed font-normal">
-                          Dedicated developer, workspace, hardware, &amp; compliance included.
-                        </p>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* Footnote bar */}
-                  <div className="mt-2 pt-4 border-t border-neutral-200/60 flex flex-col sm:flex-row justify-between items-center text-[10px] font-mono text-brand-neutralgray gap-2 relative z-10">
-                    <span className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      100% compliant Employer-of-Record (EOR) setup
-                    </span>
-                    <span className="text-brand-teal font-bold">Simple Flat Invoice</span>
-                  </div>
-
-                </div>
-
               </div>
 
             </div>

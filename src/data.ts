@@ -28,44 +28,44 @@ export const SOLUTIONS: Solution[] = [
   {
     id: "dedicated-hubs",
     title: "Dedicated Engineering Hubs",
-    description: "Secure a full-time, direct remote extension of your product department. Your dedicated team operates exclusively on your proprietary codebases under your daily leadership, on your Slack and GitHub, with zero intermediary proxies.",
+    description: "Secure a full-time, direct remote extension. Hand-selected senior developers fully integrated into your Slack and GitHub repositories.",
     benefits: [
-      "100% focused on your product backlog & roadmap",
-      "We manage payroll, legal compliance, and high-spec hardware",
-      "Save 30% to 50% compared to local recruitment pipelines"
+      "Focused 100% on your product backlog & roadmap",
+      "We manage local payroll, compliance, and hardware",
+      "Save 30% to 50% vs. traditional recruitment"
     ],
     label: "HUB MODEL"
   },
   {
     id: "cto-as-a-service",
     title: "Fractional Tech Leadership",
-    description: "Deploy strategic technology expertise to audit legacy database locks, untangle scaling bottlenecks, design highly robust system architectures, or recruit key internal hires without the overhead of a full-time C-suite executive.",
+    description: "Deploy strategic technology expertise to audit legacy codebases, untangle scaling bottlenecks, and design robust architectures.",
     benefits: [
-      "Deep system architecture and scaling audits",
-      "Strategic roadmap design & hiring blueprints",
-      "Immediate fractional availability (US/EU timezones)"
+      "Architecture, security, and scaling audits",
+      "Roadmap blueprints & tech stack alignment",
+      "Immediate fractional availability (US/EU sync)"
     ],
     label: "FRACTIONAL TECH"
   },
   {
     id: "api-integrations",
     title: "API Systems & Middleware",
-    description: "Implement high-throughput REST, GraphQL, or gRPC interfaces. Seamlessly synchronize third-party SaaS pipelines (Stripe, Salesforce, Hubspot) and deploy resilient payment webhook adapters that sustain extreme peak loads.",
+    description: "Implement high-throughput REST, GraphQL, or gRPC interfaces. Seamlessly synchronize third-party SaaS pipelines and webhooks.",
     benefits: [
       "Fault-tolerant third-party integrations",
-      "Robust custom middle-tier database pipelines",
-      "Zero-downtime microservice migrations"
+      "High-throughput middle-tier pipelines",
+      "Zero-downtime database migrations"
     ],
     label: "MIDDLEWARE"
   },
   {
     id: "operational-efficiency",
     title: "Operational Efficiency & Auditing",
-    description: "We deploy our elite engineering management staff to shadow and audit your active developer team absolutely free. After gathering objective roadmap performance and output data, we step in to reorganize, plan, structure, and optimize your division.",
+    description: "Deploy elite managers to shadow and audit your active team free of charge, then optimize workflows and staffing pipelines.",
     benefits: [
-      "Free initial 14-day shadowing & engineering process audit",
-      "Strategic optimization blueprints including staffing & pipeline structure",
-      "Eliminate legacy code debt, redundant system overheads, and roadmap lag"
+      "Free 14-day shadowing & engineering audit",
+      "Custom optimization and pipeline blueprints",
+      "Eliminate legacy code debt & roadmap lag"
     ],
     label: "OPERATIONAL AUDIT"
   }
