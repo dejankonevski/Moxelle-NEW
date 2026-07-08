@@ -137,33 +137,27 @@ export default function App() {
           <div className="max-w-4xl mx-auto px-6 relative z-10 text-left space-y-8">
             <div className="space-y-5">
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-brand-navy leading-[1.12]">
-                Build your engineering hub in Europe <span className="text-brand-teal block italic font-medium font-display">and cut costs</span>.
+                Build your engineering hub in Europe
               </h1>
 
-              <p className="text-sm md:text-base text-brand-neutralgray font-normal leading-relaxed max-w-2xl space-y-2">
-                <span className="font-bold text-brand-navy block text-base md:text-lg">
+              <div className="text-sm md:text-base text-brand-neutralgray font-normal leading-relaxed max-w-2xl space-y-3">
+                <p className="font-display font-bold text-brand-navy text-base md:text-lg">
                   Embedded senior engineering teams for growing SaaS companies.
-                </span>
-                <span>
-                  Stop hiring one engineer at a time. Build an embedded engineering hub in Europe with senior engineers fully integrated into your product team.
-                </span>
-              </p>
+                </p>
+                <p className="text-neutral-500">
+                  Growing SaaS companies build dedicated engineering hubs in Europe, with senior engineers fully embedded into your product team while we handle hiring, HR, payroll, retention and local operations.
+                </p>
+              </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 pt-1">
               <button
-                onClick={() => openBooking()}
+                onClick={() => handleScrollTo('how-it-works')}
                 className="bg-brand-teal hover:bg-brand-teal-dark text-white font-bold text-xs px-7 py-3.5 rounded-xl transition-all duration-200 shadow-sm flex items-center justify-center gap-2 group cursor-pointer"
               >
-                <span>Book a Strategy Call</span>
+                <span>See How It Works</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button
-                onClick={() => handleScrollTo('solutions')}
-                className="bg-white hover:bg-neutral-50 text-brand-navy border border-neutral-200/80 font-bold text-xs px-7 py-3.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <span>Explore Services</span>
               </button>
             </div>
 
@@ -192,14 +186,14 @@ export default function App() {
                 <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-emerald-500/5 to-transparent rounded-full pointer-events-none" />
                 <div className="space-y-2">
                   <div className="text-3xl font-extrabold tracking-tight text-emerald-600 font-display">
-                    Save 30%+
+                    30% Lower
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-display font-bold text-xs text-brand-navy">
-                      Capital Efficiency Edge
+                      Engineering Operating Costs
                     </h4>
                     <p className="text-[11px] text-brand-neutralgray leading-relaxed font-normal">
-                      Bypass recruitment fees, payroll taxes, and office overhead. Flat-rate, EOR-compliant scaling.
+                      Without sacrificing ownership, culture or product quality.
                     </p>
                   </div>
                 </div>
@@ -251,10 +245,10 @@ export default function App() {
                   {/* Pricing Display */}
                   <div className="space-y-1">
                     <div className="flex items-baseline gap-1 text-neutral-400">
-                      <span className="font-display font-black text-4xl md:text-5xl text-neutral-500 tracking-tight">$125,000</span>
+                      <span className="font-display font-black text-4xl md:text-5xl text-neutral-500 tracking-tight">$110K - $180K+</span>
                       <span className="font-mono text-sm font-semibold">/ yr</span>
                     </div>
-                    <p className="text-xs text-neutral-400 font-medium">Estimated average per Senior Engineer</p>
+                    <p className="text-xs text-neutral-400 font-medium">Average US/EU Senior Developer Base Salary</p>
                   </div>
 
                   {/* Obligations & Hidden Liabilities List */}
@@ -304,7 +298,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Box B: WHAT YOU SHOULD PAY (Moxelle Dedicated Hub) */}
+              {/* Box B: THE EMBEDDED ADVANTAGE (Moxelle Dedicated Hub) */}
               <div className="bg-brand-navy border-3 border-brand-teal rounded-[2rem] p-8 flex flex-col justify-between hover:border-emerald-400 hover:shadow-xl transition-all duration-300 relative overflow-hidden text-white shadow-lg">
                 {/* Glowing decorative effect */}
                 <div className="absolute top-0 right-0 w-44 h-44 bg-gradient-to-bl from-brand-teal/20 to-transparent rounded-full pointer-events-none" />
@@ -314,7 +308,7 @@ export default function App() {
                   <div className="flex justify-between items-start">
                     <div>
                       <span className="font-mono text-[10px] text-brand-teal font-extrabold uppercase tracking-widest bg-brand-teal/10 border border-brand-teal/20 px-2.5 py-1 rounded">
-                        WHAT YOU SHOULD PAY
+                        THE EMBEDDED ADVANTAGE
                       </span>
                       <h3 className="font-display font-extrabold text-xl text-white mt-2.5">
                         Moxelle Dedicated Hub
@@ -323,19 +317,18 @@ export default function App() {
                     
                     {/* THE ATTRACTIVE BIG CIRCLE FOR 3-SECOND COMPREHENSION */}
                     <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-500 to-brand-teal text-white flex flex-col items-center justify-center shadow-lg border border-white/20 shrink-0 transform -rotate-6 group-hover:rotate-0 transition-transform duration-300">
-                      <span className="font-mono text-[9px] font-bold uppercase tracking-widest leading-none">CUT</span>
-                      <span className="font-display font-black text-sm leading-none mt-0.5">37.6%</span>
-                      <span className="font-mono text-[8px] font-medium leading-none mt-0.5">COSTS</span>
+                      <span className="font-mono text-[9px] font-bold uppercase tracking-widest leading-none">SAVE</span>
+                      <span className="font-display font-black text-sm leading-none mt-0.5">30%+</span>
+                      <span className="font-mono text-[8px] font-medium leading-none mt-0.5 uppercase">budget</span>
                     </div>
                   </div>
 
                   {/* Pricing Display */}
                   <div className="space-y-1">
                     <div className="flex items-baseline gap-1 text-brand-teal">
-                      <span className="font-display font-black text-4xl md:text-5xl text-brand-teal tracking-tight">$78,000</span>
-                      <span className="font-mono text-sm font-semibold text-neutral-300">/ yr</span>
+                      <span className="font-display font-black text-4xl md:text-5xl text-brand-teal tracking-tight">At Least 30% Less</span>
                     </div>
-                    <p className="text-xs text-neutral-300 font-medium">Flat-rate, all-inclusive pricing per developer</p>
+                    <p className="text-xs text-neutral-300 font-medium">All-inclusive scaling relative to localized hire costs</p>
                   </div>
 
                   {/* Value & Compliance Included List */}
@@ -393,7 +386,7 @@ export default function App() {
               <div className="text-center sm:text-left space-y-1.5">
                 <span className="text-[9px] text-brand-teal font-mono font-extrabold uppercase tracking-wider block">CAPITAL RETENTION SCORE</span>
                 <h4 className="font-display font-extrabold text-xl md:text-2xl text-white">
-                  Save <span className="text-brand-teal font-black">$47,000 every single year</span> per developer.
+                  Save <span className="text-brand-teal font-black">at least 30%</span> on total compensation and overhead.
                 </h4>
                 <p className="text-xs text-neutral-300">
                   Cut overhead costs, reinvest back into runway, and accelerate your core roadmap with confidence.
@@ -401,7 +394,7 @@ export default function App() {
               </div>
               <div className="shrink-0 bg-white/5 border border-white/10 rounded-xl p-4 text-center min-w-[200px]">
                 <span className="text-[8px] text-neutral-400 font-mono font-bold uppercase tracking-widest block">FOR A 5-DEV TEAM</span>
-                <span className="font-display font-black text-2xl text-emerald-400 mt-1 block">+$235,000 / yr</span>
+                <span className="font-display font-black text-2xl text-emerald-400 mt-1 block">Save $165K+ / yr</span>
                 <span className="text-[10px] text-neutral-300 block mt-0.5">Retained Runway Capital</span>
               </div>
             </div>
@@ -420,7 +413,7 @@ export default function App() {
                 Meet our featured senior developers
               </h2>
               <p className="text-sm text-brand-neutralgray leading-relaxed max-w-lg mx-auto text-center">
-                Hover or click on any profile card to instantly flip it and inspect verified vetting, skills, and timezone details.
+                Hover or click on any profile card to instantly flip it and inspect verified vetting, skills, and core sync details.
               </p>
             </div>
 
@@ -475,7 +468,7 @@ export default function App() {
                               <span className="font-mono text-xs text-neutral-400">Overlap:</span>
                               <span className="font-bold text-emerald-600 text-sm flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                Full Sync (Daily)
+                                Core Daily Sync
                               </span>
                             </div>
                           </div>
@@ -526,7 +519,7 @@ export default function App() {
                             </div>
                             <div className="flex items-center gap-2">
                               <span className="w-1.5 h-1.5 rounded-full bg-brand-teal shrink-0" />
-                              <span className="font-bold">Stage 3: Fluent English Overlap Sync</span>
+                              <span className="font-bold">Stage 3: Fluent English &amp; Core Sync</span>
                             </div>
                           </div>
 
@@ -611,8 +604,8 @@ export default function App() {
                   {
                     id: 'q3' as const,
                     tag: "Q3",
-                    label: "Why choose Moxelle?",
-                    summary: "Full timezone alignment, direct tool integration, and high talent retention.",
+                    label: "How is communication structured?",
+                    summary: "Direct tool integration, fluent English communication, and core daily standup overlap.",
                   }
                 ].map((item) => {
                   const isActive = activeQuestion === item.id;
@@ -755,10 +748,10 @@ export default function App() {
                   <div className="space-y-6 text-left flex-grow flex flex-col justify-between">
                     <div className="space-y-4">
                       <h3 className="font-display text-2xl md:text-3xl font-bold tracking-tight text-brand-navy">
-                        Direct Timezone <span className="text-brand-teal font-display italic font-medium">Alignment</span>
+                        Seamless Process <span className="text-brand-teal font-display italic font-medium">Integration</span>
                       </h3>
                       <p className="text-xs md:text-sm text-brand-neutralgray leading-relaxed font-normal">
-                        We are not a brokerage. Every engineer is directly matched to your team, communicating in fluent English, working on your timezone, and focused exclusively on your backlog.
+                        We are not a brokerage. Every engineer is directly integrated into your workspace, communicating in fluent English, sync'd to your core daily meetings, and focused exclusively on your backlog.
                       </p>
                     </div>
 
@@ -766,15 +759,15 @@ export default function App() {
                     <div className="grid grid-cols-3 gap-3">
                       <div className="bg-white border border-neutral-200 p-4 rounded-xl text-center">
                         <span className="font-mono text-xl font-bold text-brand-navy block">100%</span>
-                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Direct Alignment</span>
+                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Direct Access</span>
                       </div>
                       <div className="bg-white border border-neutral-200 p-4 rounded-xl text-center">
-                        <span className="font-mono text-xl font-bold text-brand-teal block">8+ Hours</span>
+                        <span className="font-mono text-xl font-bold text-brand-teal block">Core Sync</span>
                         <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Daily Overlap</span>
                       </div>
                       <div className="bg-white border border-neutral-200 p-4 rounded-xl text-center">
                         <span className="font-mono text-xl font-bold text-emerald-600 block">0</span>
-                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Legal Overhead</span>
+                        <span className="font-mono text-[8px] text-brand-neutralgray uppercase tracking-wider block font-bold">Intermediaries</span>
                       </div>
                     </div>
 
